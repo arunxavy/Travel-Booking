@@ -141,7 +141,7 @@ router.delete('/me/special-days/:id', requireAuth(['member']), async (req: Reque
 // ── Special Days (Ops — can edit any member's special days) ────────────────
 
 router.get('/:memberId/special-days', requireAuth(['operations', 'admin']), async (req, res) => {
-  try { res.json(await getSpecialDays(req.params.memberId)); }
+  try { res.json(await getSpecialDays(req.params.memberId as string)); }
   catch { res.status(500).json({ message: 'Internal server error' }); }
 });
 
