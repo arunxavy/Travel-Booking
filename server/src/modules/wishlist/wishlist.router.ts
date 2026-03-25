@@ -7,7 +7,7 @@ const router = Router();
 // POST /wishlist/:packageId — Member: add to wishlist
 router.post('/:packageId', requireAuth(['member']), async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await addToWishlist(req.user!.id, req.params.packageId);
+    const result = await addToWishlist(req.user!.id, req.params.packageId as string);
     if (result.already_saved) {
       res.json({ already_saved: true, entry: result.entry });
     } else {
@@ -27,7 +27,7 @@ router.post('/:packageId', requireAuth(['member']), async (req: Request, res: Re
 // DELETE /wishlist/:packageId — Member: remove from wishlist
 router.delete('/:packageId', requireAuth(['member']), async (req: Request, res: Response): Promise<void> => {
   try {
-    await removeFromWishlist(req.user!.id, req.params.packageId);
+    await removeFromWishlist(req.user!.id, req.params.packageId as string);
     res.status(204).send();
   } catch (err: unknown) {
     const e = err as Error & { statusCode?: number };

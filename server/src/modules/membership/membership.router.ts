@@ -39,7 +39,7 @@ router.post('/ops-users', requireAuth(['admin']), async (req: Request, res: Resp
 router.patch('/ops-users/:id', requireAuth(['admin']), async (req: Request, res: Response): Promise<void> => {
   const { status } = req.body;
   try {
-    await updateMember(req.params.id, { status });
+    await updateMember(req.params.id as string, { status });
     res.json({ message: 'Updated' });
   } catch (err: unknown) {
     const e = err as Error & { statusCode?: number };
@@ -92,7 +92,7 @@ router.patch('/me', requireAuth(['member']), async (req: Request, res: Response)
 });
 
 router.get('/:id', requireAuth(['operations', 'admin']), async (req, res) => {
-  try { res.json(await getMemberById(req.params.id)); }
+  try { res.json(await getMemberById(req.params.id as string)); }
   catch (err: unknown) {
     const e = err as Error & { statusCode?: number };
     res.status(e.statusCode ?? 500).json({ message: e.message });
@@ -102,7 +102,7 @@ router.get('/:id', requireAuth(['operations', 'admin']), async (req, res) => {
 router.patch('/:id', requireAuth(['operations', 'admin']), async (req: Request, res: Response): Promise<void> => {
   const { membershipExpiry, tierId, status, phone } = req.body;
   try {
-    res.json(await updateMember(req.params.id, { membershipExpiry, tierId, status, phone }));
+    res.json(await updateMember(req.params.id as string, { membershipExpiry, tierId, status, phone }));
   } catch (err: unknown) {
     const e = err as Error & { statusCode?: number };
     res.status(e.statusCode ?? 500).json({ message: e.message });
@@ -130,7 +130,7 @@ router.post('/me/special-days', requireAuth(['member']), async (req: Request, re
 // Members can delete their own special days but NOT edit them
 router.delete('/me/special-days/:id', requireAuth(['member']), async (req: Request, res: Response): Promise<void> => {
   try {
-    await deleteSpecialDay(req.params.id, req.user!.id);
+    await deleteSpecialDay(req.params.id as string, req.user!.id);
     res.status(204).send();
   } catch (err: unknown) {
     const e = err as Error & { statusCode?: number };
@@ -148,7 +148,7 @@ router.get('/:memberId/special-days', requireAuth(['operations', 'admin']), asyn
 router.patch('/:memberId/special-days/:id', requireAuth(['operations', 'admin']), async (req: Request, res: Response): Promise<void> => {
   const { label, eventDate } = req.body;
   try {
-    res.json(await updateSpecialDay(req.params.id, req.params.memberId, { label, eventDate }));
+    res.json(await updateSpecialDay(req.params.id as string, req.params.memberId as string, { label, eventDate }));
   } catch (err: unknown) {
     const e = err as Error & { statusCode?: number };
     res.status(e.statusCode ?? 500).json({ message: e.message });

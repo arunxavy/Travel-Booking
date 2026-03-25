@@ -43,7 +43,7 @@ router.post('/', requireAuth(['admin']), async (req: Request, res: Response): Pr
 router.patch('/:id', requireAuth(['admin']), async (req: Request, res: Response): Promise<void> => {
   const { title, location, category, price, isFeatured, numberOfDays, itinerary, included, excluded } = req.body;
   try {
-    const pkg = await updatePackage(req.params.id, { title, location, category, price, isFeatured, numberOfDays, itinerary, included, excluded });
+    const pkg = await updatePackage(req.params.id as string, { title, location, category, price, isFeatured, numberOfDays, itinerary, included, excluded });
     res.json(pkg);
   } catch (err: unknown) {
     const e = err as Error & { statusCode?: number };

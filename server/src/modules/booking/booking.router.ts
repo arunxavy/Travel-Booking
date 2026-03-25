@@ -40,7 +40,7 @@ router.patch('/:id/status', requireAuth(['operations']), async (req: Request, re
     return;
   }
   try {
-    res.json(await updateBookingStatus(req.params.id, status as BookingStatus));
+    res.json(await updateBookingStatus(req.params.id as string, status as BookingStatus));
   } catch (err: unknown) {
     const e = err as Error & { statusCode?: number; currentStatus?: string; allowedTransitions?: string[] };
     res.status(e.statusCode ?? 500).json({ message: e.message, currentStatus: e.currentStatus, allowedTransitions: e.allowedTransitions });
@@ -50,7 +50,7 @@ router.patch('/:id/status', requireAuth(['operations']), async (req: Request, re
 // ── Package Booking Comments ──────────────────────────────────────────────────
 
 router.get('/:id/comments', requireAuth(['member', 'operations', 'admin']), async (req, res) => {
-  try { res.json(await getComments(req.params.id, 'package')); }
+  try { res.json(await getComments(req.params.id as string, 'package')); }
   catch (err: unknown) { res.status(500).json({ message: (err as Error).message }); }
 });
 
@@ -58,7 +58,7 @@ router.post('/:id/comments', requireAuth(['member', 'operations', 'admin']), asy
   const { message } = req.body;
   if (!message?.trim()) { res.status(400).json({ message: 'message is required' }); return; }
   try {
-    res.status(201).json(await addComment(req.params.id, 'package', req.user!.id, req.user!.role, message.trim()));
+    res.status(201).json(await addComment(req.params.id as string, 'package', req.user!.id, req.user!.role, message.trim()));
   } catch (err: unknown) { res.status(500).json({ message: (err as Error).message }); }
 });
 
@@ -101,7 +101,7 @@ router.patch('/custom/:id/status', requireAuth(['operations']), async (req: Requ
     return;
   }
   try {
-    res.json(await updateCustomBookingStatus(req.params.id, status as BookingStatus));
+    res.json(await updateCustomBookingStatus(req.params.id as string, status as BookingStatus));
   } catch (err: unknown) {
     const e = err as Error & { statusCode?: number; currentStatus?: string; allowedTransitions?: string[] };
     res.status(e.statusCode ?? 500).json({ message: e.message, currentStatus: e.currentStatus, allowedTransitions: e.allowedTransitions });
@@ -111,7 +111,7 @@ router.patch('/custom/:id/status', requireAuth(['operations']), async (req: Requ
 // ── Custom Booking Comments ───────────────────────────────────────────────────
 
 router.get('/custom/:id/comments', requireAuth(['member', 'operations', 'admin']), async (req, res) => {
-  try { res.json(await getComments(req.params.id, 'custom')); }
+  try { res.json(await getComments(req.params.id as string, 'custom')); }
   catch (err: unknown) { res.status(500).json({ message: (err as Error).message }); }
 });
 
@@ -119,7 +119,7 @@ router.post('/custom/:id/comments', requireAuth(['member', 'operations', 'admin'
   const { message } = req.body;
   if (!message?.trim()) { res.status(400).json({ message: 'message is required' }); return; }
   try {
-    res.status(201).json(await addComment(req.params.id, 'custom', req.user!.id, req.user!.role, message.trim()));
+    res.status(201).json(await addComment(req.params.id as string, 'custom', req.user!.id, req.user!.role, message.trim()));
   } catch (err: unknown) { res.status(500).json({ message: (err as Error).message }); }
 });
 
